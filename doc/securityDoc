@@ -1,0 +1,12 @@
+1、安全策略配置关于系统的安全管理及各种设计,Spring Security已经大体上都实现了,只
+需要进行一些配置和引用,就能够正常使用。如代码清单5-2所示,安全配置类 SecurityConfiguration继承了Spring Security的WebSecurityConfigurerAdapter。
+这里可以使用HttpSecurity的一些安全策略进行配置,各项配置的解释如下:
+    口loginPage:设置一个使用自定义的登录页面URL。
+    口loginSuccessHandler:设置自定义的一个登录成功处理器。
+    口permitAll :是完全允许访问的一些URL配置,并可以使用通配符来设置,
+        这里将一些资源目录赋予可以完全访问的权限,由settings指定的权限列表也赋予了完全访
+    问的权限。口logout:设置使用默认的登出口 logoutSuccessUrl:设定登出成功的链接
+    口rememberMe:用来记住用户的登录状态,即用户没有执行退出时,再次打开页面将不用登录。
+    口csrf:即跨站请求伪造(cross-site request forgery),这是一个防止跨站请求伪造攻
+        击的策略设置。
+    口accessDeniedPage:配置一个拒绝访问的提示链接。

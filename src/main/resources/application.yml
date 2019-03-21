@@ -52,5 +52,19 @@ spring:
       max-active: 8
       max-wait: -1
 
+#使用自定义的securityconfig
+securityconfig:
+  logoutsuccessurl: /
+  permitall: /rest/**,/bbs**
+  deniedpage: /deny
+  #urlrole配置一个权限配置列表，这是我们设计的一种权限管理规则，列表中的
+  #没有给配置项用分号分隔，每一个配置项的等号左边是一个可以带上通配符的链接地址
+  #等号右边是一个角色列表，角色之间用逗号分隔。没有给配置项标识包含等号左边字符串的来链接地址
+  #能够被等号右边的角色访问
+  urlroles: /**/new = manage,admin;
+            /**/edit/** = admin;
+            /**/delete/** = admin
+
+
 
 
