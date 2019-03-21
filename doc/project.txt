@@ -1,0 +1,10 @@
+ ==============  jpa 配置  ==============
+
+创建命名策略：
+    在开发软件时，通常会要求每个开发人员遵守共同的命名策略。例如，数据库的表名及字段名的所有字符都要大写，表名以“S”结尾。对于Customer类，对应的数据库表名为CUSTOMERS。为了在映射文件中遵守这种命名约定，一种方法是手工设置表名和字段名，但是这种方式很耗时，而且容易出错。还有一种方式是实现Hibernate的org.hibernate.cfg.NamingStrategy接口。对于这一接口，Hibernate已经提供了两个参考实现类：
+
+            ① org.hibernate.cfg.DefaultNamingStrategy类：这是NamingStrategy接口的默认实现类。
+
+            ② org.hibernate.cfg.ImprovedNamingStrategy类：这是NamingStategy接口的高级实现类。
+
+             自定义的实现类可以继承以上两个参考实现类之一，然后覆盖其中的部分方法

@@ -1,0 +1,342 @@
+===================================== linux下安装redis ==================================
+安装redis:
+    第一步：下载redis安装包
+        wget http://download.redis.io/releases/redis-4.0.6.tar.gz
+
+    第二步：解压压缩包
+        tar -zxvf redis-4.0.6.tar.gz
+
+    第三步：yum安装gcc依赖
+        yum install gcc
+
+    第四步：进入redis-4.0.6解压目录
+        cd redis-4.0.6
+
+    第五步：编译安装
+        make MALLOC=libc
+
+    第六步：进入src目录安装
+        cd src && make install
+
+启动redis的三种方式
+
+   1、直接启动redis
+        ./redis-server
+
+   2、以后台进程的方式启动redis
+        第一步：修改redis.conf文件
+            将daemonize no修改为daemonize yes
+        第二步：指定redis.conf文件启动
+            ./redis-server /usr/local/redis-4.0.6/redis.conf
+
+   3、设置redis开机自启动
+        1、在/etc目录下新建redis目录
+            mkdir redis
+        2、/usr/local/redis-4.0.6/redis.conf 文件复制一份到/etc/redis目录下，并命名为6379.conf　
+            cp /usr/local/redis-4.0.6/redis.conf /etc/redis/6379.conf
+
+        3、将redis的启动脚本复制一份放到/etc/init.d目录下
+            cp /usr/local/redis-4.0.6/utils/redis_init_script /etc/init.d/redisd
+
+        4、设置redis开机自启动
+            先切换到/etc/init.d目录下，然后执行自启命令，chkconfig redisd on
+            发现 结果是redisd不支持chkconfig
+
+            解决方法：
+            使用vim编辑redisd文件，在第一行加入如下两行注释，保存退出
+                # chkconfig:   2345 90 10
+                # description:  Redis is a persistent key-value database
+            再次执行开机自启命令，成功
+                chkconfig redisd on
+
+            现在可以直接已服务的形式启动和关闭redis了
+                启动：
+                    service redisd start　
+                关闭：
+                    service redisd stop
+
+========== redis 防火墙开放端口外网无法访问的问题
+
+查看redis配置文件redis.conf里面的bind参数设置的ip，一般是只会监听127.0.0.1，会导致外网无法访问，
+可以设置ip，也可以直接改成0.0.0.0，开放所有ip访问，但是会导致安全问题，应该设置密码（默认没有密码）
+都设置好了，通过查看端口就可以看出来他已经监听0.0.0.0啦。外网就可以访问啦
+
+
+================================================  linux 添加环境变量 ==============================================
+
+Linux添加系统环境变量
+复制代码
+在Linux下使用源码安装软件的时候，通常只能在软件安装目录下使用该软件命令(使用yum命令安装的除外)，这样太麻烦，我们希望全局使用，可以将软件安装路径添加到系统环境变量里。
+添加环境变量有2种方法：
+
+//1,使用export命令
+export PATH=$PATH:/opt/software/node-v8.9.3-linux-x64/bin/node
+
+//export使用方法为 export PATH=$PATH:路径1:路径2:路径n;$PATH为系统变量,表示之前所有设置的路径，如果不加则之前所有的路径都失效。所以必须加上。
+
+//2,修改配置文件/etc/profile
+vi /etc/profile
+在里面加入:export PATH=$PATH:/opt/software/node-v8.9.3-linux-x64/bin/node
+
+//如果是修改用户主目录下的.bash_profile，则添加的环境变量只对该用户有效，修改/etc/profile对所有用户都生效。也可以修改/etc/rc.local文件和/root/.bashrc文件。
+//修改好配置文件后执行source /etc/profile 或者 source /root/.bashrc使配置文件生效
+
+
+================================================== centos7 安装mongodb =========================================
+
+1、下载与 CentOS 系统匹配的 mongodb-linux-x86_64-rhel70-3.2.4.tgz 文件：
+   wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-3.2.4.tgz
+
+2、解压缩 mongodb-linux-x86_64-rhel70-3.2.4.tgz 文件：
+   tar -zxvf mongodb-linux-x86_64-rhel70-3.2.4.tgz
+
+3、重命名 mongodb-linux-x86_64-rhel70-3.2.4 文件为 mongodb3.2.4：
+   mv mongodb-linux-x86_64-rhel70-3.2.4 mongodb3.2.4
+
+4、返回到上一级目录，并创建 mongodb 目录：
+   cd ../
+   mkdir -p mongodb
+
+5、在 /usr/local/mongodb/mongodb3.2.4/bin/ 目录中创建一个存放日志的目录：
+   mkdir -p data/test/logs
+
+6、在 /usr/local/mongodb/mongodb3.2.4/bin/ 目录中创建一个存放数据文件的目录：
+   mkdir -p data/test/db
+
+7、在bin目录下创建配置文件 mongodb.conf：
+     vi mongodb.conf
+
+     在 mongodb.conf 写入如下内容：
+       # idae - MongoDB config start - 2016-05-02
+
+       # 设置数据文件的存放目录
+       dbpath = /usr/local/mongodb/mongodb3.2.4/bin/data/test/db
+
+       # 设置日志文件的存放目录及其日志文件名
+       logpath = /usr/local/mongodb/mongodb3.2.4/bin/data/test/logs/mongodb.log
+
+       # 设置端口号（默认的端口号是 27017）
+       port = 27017
+
+       # 设置为以守护进程的方式运行，即在后台运行
+       fork = true
+
+       # nohttpinterface = true
+       nohttpinterface = true
+       # idae - MongoDB config end - 2016-05-02
+
+      按英文状态下的“:wq”保存并退出；
+
+      参数解释:
+       --dbpath 数据库路径(数据文件)
+       --logpath 日志文件路径
+       --master 指定为主机器
+       --slave 指定为从机器
+       --source 指定主机器的IP地址
+       --pologSize 指定日志文件大小不超过64M.因为resync是非常操作量大且耗时，最好通过设置一个足够大的oplogSize来避免resync(默认的 oplog大小是空闲磁盘大小的5%)。
+       --logappend 日志文件末尾添加，即使用追加的方式写日志
+       --journal 启用日志
+       --port 启用端口号
+       --fork 在后台运行
+       --only 指定只复制哪一个数据库
+       --slavedelay 指从复制检测的时间间隔
+       --auth 是否需要验证权限登录(用户名和密码)
+       --syncdelay 数据写入硬盘的时间（秒），0是不等待，直接写入
+       --notablescan 不允许表扫描
+       --maxConns 最大的并发连接数，默认2000
+       --pidfilepath 指定进程文件，不指定则不产生进程文件
+       --bind_ip 绑定IP，绑定后只能绑定的IP访问服务
+
+8、启动 mongodb 服务：
+  1 以自定义的 mongodb 配置文件方式启动：
+     ./mongod --config mongodb.conf
+  2 以修复模式启动 mongodb：
+    ./mongod --repair -f mongodb.conf
+  3 以参数式启动：
+    ./mongod /usr/local/mongodb/mongodb3.2.4/bin/mongod --dbpath=/usr/local/mongodb/mongodb3.2.4/bin/data/test/db --logpath=/usr/local/mongodb/mongodb3.2.4/bin/data/test/logs/mongodb.log --fork
+        如果报如下错误：
+          ERROR: child process failed, exited with error number 1
+            很可能是 mongodb.conf 中配置的路径不一致问题；
+        如果报如下错误：
+          ERROR: child process failed, exited with error number 100
+            很可能是没有正常关闭导致的，那么可以删除 mongod.lock 文件
+
+9、 查看 mongodb 进程：
+     ps aux |grep mongodb
+
+10、查看 mongodb 服务的运行日志：
+    tail -200f /usr/local/mongodb/mongodb3.2.4/bin/data/test/logs/mongodb.log
+
+11、检查端口是否已被启动：
+    netstat -lanp | grep 27017
+
+12、杀死 mongodb 进程，即可关闭 mongodb 服务：
+     kill -15 PID
+     PID 可以通过步骤 9 查看到
+
+13、 如果出现如下情况
+    warning: Failed to connect to 127.0.0.1:27017, reason: errno:111 Connection refused
+
+    可以采用如下两种方式解决：
+     1 若数据库出现如上不能连接的原因，可能是data目录下的mongod.lock文件问题，可以用如下命令修复：
+         ./bin/mongod --repair
+     2 或者直接删除mongod.lock
+         rm -f /usr/local/mongodb/data/db/mongod.lock
+       然后再启动 mongodb 服务：
+          ./mongod --config mongodb.conf
+        如果以上两部依然解决不掉，则是路径文件，我们可以删除 /usr/local/mongodb/mongodb3.2.4/bin/data 目录及其子目录，并采用绝对路径的方式：
+            ./mongod /usr/local/mongodb/mongodb3.2.4/bin/mongod --dbpath=/usr/local/mongodb/mongodb3.2.4/bin/data/test/db --logpath=/usr/local/mongodb/mongodb3.2.4/bin/data/test/logs/mongodb.log --fork
+
+14、 将 mongodb 服务加入到自启动文件中：
+    vi /etc/rc.local
+         在文件末尾追加如下命令：
+            /usr/local/mongodb/mongodb3.2.4/bin/mongod --config mongodb.conf
+             保存并退出：
+             :wq!
+
+15、客户端常用命令：
+    db.version(); # 查看 mongodb 的版本
+    use test; # 进入到指定的数据中，这里是 test 数据库
+
+16、 在 /usr/local/mongodb/mongodb3.2.4/bin/ 目录中，键入如下命令，打开一个 mongodb 的客户端程序，即打开一个 mongodb 的 shell 客户端，这个 shell 客户端同时也是一个 JavaScript 编辑器，即可用输入任何的 JavaScript 脚本：
+    ./mongo
+    默认连接至 test 数据库
+
+17、设置开机自启动
+    1、cd /etc/init.d
+    2、vi mongodb（创建启动文件，内容如下,确保下面启动和关闭的命令可以正常执行）
+        #!/bin/sh
+        #
+        #chkconfig: 2345 80 90
+        #description: mongodb
+
+        if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+           echo never > /sys/kernel/mm/transparent_hugepage/enabled
+        fi
+        if test -f /sys/kernel/mm/transparent_hugepage/defrag; then
+           echo never > /sys/kernel/mm/transparent_hugepage/defrag
+        fi
+
+        start() {
+        /usr/local/mongodb/bin/mongod -f /usr/local/mongodb/bin/mongodb.conf
+        }
+
+        stop() {
+        /usr/local/mongodb/bin/mongod -f /usr/local/mongodb/bin/mongodb.conf --shutdown
+        }
+
+        case "$1" in
+          start)
+            start
+            ;;
+          stop)
+            stop
+            ;;
+          restart)
+            stop
+            start
+            ;;
+          *)
+         echo $"Usage: $0 {start|stop|restart}"
+         exit 1
+        esac
+        修改权限
+        chmod –R a+x mongodb
+        chkconfig --add mongodb
+        chkconfig mongodb on
+        mongodb start（启动之前确保已经kill 掉mongodb，出现如下，表明启动成功）
+
+18、 在浏览器中输入 IP:27017，如：
+
+  http://localhost:27017/
+
+
+================================================== centos7 开放端口 ===========================================
+
+redis等服务启动后，外网默认是无法访问的，因为防火墙不允许，所以要开启防火墙，让其可以访问这些端口号。
+
+方法一：使用firewall
+
+（1）查看对外开放的端口状态
+    查询已开放的端口 netstat -anp
+    查询指定端口是否已开 firewall-cmd --query-port=666/tcp
+    提示 yes，表示开启；no表示未开启。
+
+（2）查看防火墙状态
+    查看防火墙状态 systemctl status firewalld
+    开启防火墙 systemctl start firewalld
+    关闭防火墙 systemctl stop firewalld
+    开启防火墙 service firewalld start
+    若遇到无法开启
+    先用：systemctl unmask firewalld.service
+    然后：systemctl start firewalld.service
+
+ （3）对外开发端口
+    查看想开的端口是否已开：
+    firewall-cmd --query-port=6379/tcp
+
+ 添加指定需要开放的端口：
+     firewall-cmd --add-port=123/tcp --permanent
+     重载入添加的端口：
+     firewall-cmd --reload
+     查询指定端口是否开启成功：
+     firewall-cmd --query-port=123/tcp
+
+ 移除指定端口：
+ firewall-cmd --permanent --remove-port=123/tcp
+
+1、运行命令：
+    firewall-cmd --get-active-zones
+    运行完成之后，可以看到zone名称，如下：
+
+2、执行如下命令命令：
+    firewall-cmd --zone=public --add-port=6379/tcp --permanent
+
+3、重启防火墙，运行命令：
+    firewall-cmd --reload
+
+4、查看端口号是否开启，运行命令：
+    firewall-cmd --query-port=6379/tcp
+
+
+方法二：使用iptables
+    1、先运行如下命令：
+        /sbin/iptables -I INPUT -p tcp --dport xxx -j ACCEPT
+
+    2、然后运行：
+        /etc/rc.d/init.d/iptables save
+
+        或者这个命令：
+
+            1、-A INPUT -m state –state NEW -m tcp -p tcp –dport xxx -j ACCEPT?
+
+            2、在运行这个命令：
+
+            -A INPUT -j REJECT –reject-with icmp-host-prohibited
+
+            注：xxx ——表示你要开启的端口号，如：6379
+
+    安装iptables-services ：
+    yum install iptables-services
+    进入下面目录进行修改：
+    /etc/sysconfig/iptables
+
+测试：在windows下按下win+R键，输入cmd，运行命令(需开启telnet)，如果变成空界面表示成功：
+
+         telnet 192.168.xx.xx 6379
+
+注：开启telnet方法如下：
+
+        1. 进入控制面板，选择程序；
+
+        2. 点击程序，进入程序和功能；
+
+        3.勾选telnet功能，点击确定即可。
+
+
+
+
+
+
+
+

@@ -1,0 +1,56 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+    #初始化大小，最小，最大
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    #配置获取连接等待超时的时间
+    maxWait: 60000
+
+    #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+
+    #配置一个连接在池中的最小生存时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnReturn: false
+    #打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementperConnectionSize: 20
+    #配置监控统计拦截的filters，去掉后监控界面sql将无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+    #通过connectProperties属性来打开mergeSql功能，慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    #合并多个DruidDataSource的监控数据
+    #useGlobalDataSourceStat=true
+    #上面配置中的filters:stat表示已经可以使用监控过滤器，这时结合定义一个过滤器，就可以用来监控数据库的使用情况
+
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ##\u81EA\u52A8\u66F4\u65B0\u8868\u7ED3\u6784
+      ddl-auto: update
+      #\u521B\u5EFA\u547D\u540D\u7B56\u7565
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+
+      #\u6307\u5B9A\u6570\u636E\u5E93\u7684\u65B9\u8A00
+      dialect: org.hibernate.dialect.MySQL5Dialect
+
+  redis:
+    #database: 1
+    host: 192.168.3.123
+    port: 6379
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
+
+
+
