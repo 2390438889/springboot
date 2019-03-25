@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
@@ -15,12 +16,15 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/3/19
  * @desc 用户的redis服务类
  */
+@Repository
 public class RedisRepository<T> {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     private Class<T> clazz;
 
+    public RedisRepository() {
+    }
 
     public RedisRepository(Class<T> clazz) {
         this.clazz = clazz;

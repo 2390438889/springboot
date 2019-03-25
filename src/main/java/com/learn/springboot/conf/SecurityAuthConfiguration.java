@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ import java.util.regex.Pattern;
  * @date 2019/3/21
  * @desc 安全配置策略
  */
-
+@Component
 public class SecurityAuthConfiguration extends WebSecurityConfigurerAdapter{
 
     @Autowired

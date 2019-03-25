@@ -2,6 +2,9 @@ package com.learn.springboot.dao;
 
 import com.learn.springboot.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,5 +13,6 @@ import org.springframework.stereotype.Repository;
  * @desc
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>{
+
 }

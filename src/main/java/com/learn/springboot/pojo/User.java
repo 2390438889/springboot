@@ -23,6 +23,10 @@ public class User implements Serializable {
 
     private String name;
 
+    private String username;
+
+    private String password;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     /**
      * 日期格式方式
@@ -99,6 +103,22 @@ public class User implements Serializable {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

@@ -15,7 +15,7 @@ import javax.sql.DataSource;
  * @desc
  */
 @Configuration
-public class SecurityConnfig {
+public class SecurityConfig {
     @Autowired
     @Qualifier("dataSource")
     private DataSource dataSource;

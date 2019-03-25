@@ -8,3 +8,15 @@
             ② org.hibernate.cfg.ImprovedNamingStrategy类：这是NamingStategy接口的高级实现类。
 
              自定义的实现类可以继承以上两个参考实现类之一，然后覆盖其中的部分方法
+
+
+============================================== java.lang.NoSuchMethodError: org.springframework.boot.builder.SpringApplicationBuilder.<init>([Ljava/lang/Object;)V
+
+是由于spring boot版本兼容性导致的，在pom.xml中修改配置文件，修改前：
+
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.0.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
